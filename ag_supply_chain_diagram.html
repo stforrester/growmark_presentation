@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agriculture Supply Chain Hub-and-Spoke Model</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 40px;
+            font-size: 2.2em;
+            font-weight: 300;
+        }
+        
+        .supply-chain {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            margin-bottom: 80px;
+            position: relative;
+            min-height: 500px;
+            overflow-x: auto;
+            padding: 20px 0;
+            gap: 40px;
+        }
+        
+        .stage-hub {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            width: 180px;
+            min-height: 500px;
+            margin: 0 10px;
+            flex-shrink: 0;
+            background: none;
+        }
+        
+        .hub-center {
+            position: relative;
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(145deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 0.95em;
+            text-align: center;
+            line-height: 1.1;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+            z-index: 10;
+            margin: 18px 0;
+        }
+        
+        .spoke {
+            position: relative;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: white;
+            border: 2px solid #667eea;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            overflow: hidden;
+            margin: 10px 0 0 0;
+        }
+
+        /* ✅ Ensures ALL logos are uniform circles, 60px */
+        .spoke-logo,
+        .retailer-spoke .spoke-logo {
+            width: 60px;           /* fixed width */
+            height: 60px;          /* fixed height */
+            object-fit: contain;     /* keeps aspect ratio but fills circle */
+            border-radius: 50%;    /* circle shape */
+            display: block;
+            margin: 0;
+            padding: 0;
+            background: none;
+        }
+        
+        .spoke-label {
+            position: static;
+            font-size: 0.65em;
+            font-weight: 600;
+            color: #2c3e50;
+            text-align: center;
+            white-space: nowrap;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 2px 6px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin: 0 0 10px 0;
+        }
+        
+        .spoke::before {
+            display: none;
+        }
+        
+        .arrow-between {
+            align-self: center;
+            width: 60px;
+            height: 100px;
+            position: relative;
+            display: flex;
+            justify-content: center;
+        }
+        
+        .arrow-between::before {
+            content: '';
+            display: block;
+            position: absolute;
+            left: -13px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 50px;
+            height: 0;
+            border-top: 3px solid #764ba2;
+            border-radius: 2px;
+        }
+        
+        .arrow-between::after {
+            content: '';
+            position: absolute;
+            left: 32px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 0;
+            height: 0;
+            border-left: 12px solid #764ba2;
+            border-top: 7px solid transparent;
+            border-bottom: 7px solid transparent;
+        }
+
+        /* Spoke positioning - 6 positions around each hub with increased spacing */
+        .spoke:nth-child(2) { 
+            top: 20px; 
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        .spoke:nth-child(2) .spoke-label {
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        .spoke:nth-child(2)::before {
+            height: 60px;
+            width: 4px;
+            bottom: -60px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .spoke:nth-child(3) { 
+            top: 60px; 
+            right: 20px;
+        }
+        .spoke:nth-child(3) .spoke-label {
+            top: -25px;
+            right: 0;
+        }
+        .spoke:nth-child(3)::before {
+            width: 50px;
+            height: 4px;
+            bottom: 50%;
+            left: -50px;
+            transform: translateY(50%) rotate(30deg);
+            transform-origin: right;
+        }
+        
+        .spoke:nth-child(4) { 
+            bottom: 60px; 
+            right: 20px;
+        }
+        .spoke:nth-child(4) .spoke-label {
+            bottom: -25px;
+            right: 0;
+        }
+        .spoke:nth-child(4)::before {
+            width: 50px;
+            height: 4px;
+            top: 50%;
+            left: -50px;
+            transform: translateY(-50%) rotate(-30deg);
+            transform-origin: right;
+        }
+        
+        .spoke:nth-child(5) { 
+            bottom: 20px; 
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        .spoke:nth-child(5) .spoke-label {
+            bottom: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        .spoke:nth-child(5)::before {
+            height: 60px;
+            width: 4px;
+            top: -60px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .spoke:nth-child(6) { 
+            bottom: 60px; 
+            left: 20px;
+        }
+        .spoke:nth-child(6) .spoke-label {
+            bottom: -25px;
+            left: 0;
+        }
+        .spoke:nth-child(6)::before {
+            width: 50px;
+            height: 4px;
+            top: 50%;
+            right: -50px;
+            transform: translateY(-50%) rotate(30deg);
+            transform-origin: left;
+        }
+        
+        .spoke:nth-child(7) { 
+            top: 60px; 
+            left: 20px;
+        }
+        .spoke:nth-child(7) .spoke-label {
+            top: -25px;
+            left: 0;
+        }
+        .spoke:nth-child(7)::before {
+            width: 50px;
+            height: 4px;
+            bottom: 50%;
+            right: -50px;
+            transform: translateY(50%) rotate(-30deg);
+            transform-origin: left;
+        }
+        
+        /* Company-specific styling for other stages */
+        .logo-growmark { background: #1e3a8a; color: white; font-size: 0.6em; }
+        .logo-chs { background: #dc2626; color: white; font-size: 0.6em; }
+        .logo-helena { background: #059669; color: white; font-size: 0.6em; }
+        .logo-wilbur { background: #7c3aed; color: white; font-size: 0.6em; }
+        .logo-simplot { background: #ea580c; color: white; font-size: 0.6em; }
+        .logo-nutrien-ag { background: #005eb8; color: white; font-size: 0.6em; }
+        
+        .logo-farmers { background: #22c55e; color: white; font-size: 0.55em; }
+        .logo-coop { background: #3b82f6; color: white; font-size: 0.6em; }
+        .logo-corporate { background: #8b5cf6; color: white; font-size: 0.55em; }
+        .logo-family { background: #f59e0b; color: white; font-size: 0.55em; }
+        .logo-regional { background: #ef4444; color: white; font-size: 0.55em; }
+        .logo-specialty { background: #06b6d4; color: white; font-size: 0.55em; }
+        
+        .logo-cargill { background: #1f2937; color: white; font-size: 0.6em; }
+        .logo-bunge { background: #dc2626; color: white; font-size: 0.6em; }
+        .logo-adm { background: #059669; color: white; font-size: 0.6em; }
+        .logo-dreyfus { background: #7c3aed; color: white; font-size: 0.55em; }
+        .logo-gavilon { background: #ea580c; color: white; font-size: 0.6em; }
+        .logo-chs-grain { background: #dc2626; color: white; font-size: 0.6em; }
+        
+        .logo-pepsi { background: #0066cc; color: white; font-size: 0.6em; }
+        .logo-mars { background: #8b4513; color: white; font-size: 0.6em; }
+        .logo-tyson { background: #006400; color: white; font-size: 0.55em; }
+        .logo-frito { background: #ffa500; color: white; font-size: 0.6em; }
+        .logo-exxon { background: #000080; color: white; font-size: 0.6em; }
+        .logo-renewable { background: #228b22; color: white; font-size: 0.55em; }
+        
+        .ancillary-services {
+            margin-top: 40px;
+        }
+        
+        .ancillary-title {
+            text-align: center;
+            font-size: 1.8em;
+            color: #34495e;
+            margin-bottom: 30px;
+            font-weight: 300;
+        }
+        
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .service-category {
+            background: linear-gradient(145deg, #ff9a56 0%, #ffad56 100%);
+            border-radius: 12px;
+            padding: 20px;
+            color: white;
+            box-shadow: 0 8px 25px rgba(255, 154, 86, 0.3);
+            position: relative;
+        }
+        
+        .service-category h4 {
+            margin: 0 0 15px 0;
+            font-size: 1.1em;
+            font-weight: 600;
+            text-align: center;
+            border-bottom: 2px solid rgba(255,255,255,0.3);
+            padding-bottom: 10px;
+        }
+        
+        .service-company {
+            background: rgba(255,255,255,0.2);
+            margin: 6px 0;
+            padding: 6px 10px;
+            border-radius: 5px;
+            font-size: 0.85em;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .service-company:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-1px);
+        }
+        
+        .connection-lines {
+            position: relative;
+            height: 80px;
+            margin: 20px 0;
+        }
+        
+        .connection-line {
+            position: absolute;
+            height: 2px;
+            background: linear-gradient(90deg, #ff9a56, #667eea);
+            border-radius: 1px;
+            opacity: 0.7;
+            transition: all 0.3s ease;
+        }
+        
+        .connection-line:hover {
+            opacity: 1;
+            height: 3px;
+        }
+        
+        .legend {
+            background: #ecf0f1;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 30px;
+            border-left: 5px solid #3498db;
+        }
+        
+        .legend h4 {
+            color: #2c3e50;
+            margin: 0 0 10px 0;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin: 8px 0;
+            font-size: 0.9em;
+        }
+        
+        .legend-line {
+            width: 30px;
+            height: 3px;
+            margin-right: 10px;
+            border-radius: 1px;
+        }
+        
+        .oem-line { background: linear-gradient(90deg, #ff9a56, #667eea); }
+        .finance-line { background: linear-gradient(90deg, #ff9a56, #764ba2); }
+        .data-line { background: linear-gradient(90deg, #ff9a56, #667eea); }
+        
+        .connection-indicator {
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #e74c3c;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.7em;
+            font-weight: bold;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 1400px) {
+            .supply-chain {
+                justify-content: flex-start;
+                gap: 20px;
+            }
+            .stage-hub {
+                width: 160px;
+                min-height: 400px;
+                margin: 0 8px;
+            }
+        }
+        
+        @media (max-width: 1200px) {
+            .supply-chain {
+                flex-direction: column;
+                align-items: center;
+                height: auto;
+            }
+            .stage-hub {
+                margin: 30px 0;
+                width: 180px;
+                min-height: 350px;
+            }
+            .flow-arrow {
+                display: none;
+            }
+            .services-grid {
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            .stage-hub {
+                width: 120px;
+                min-height: 250px;
+            }
+            .spoke {
+                width: 45px;
+                height: 45px;
+            }
+            .spoke-label {
+                font-size: 0.6em;
+            }
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .spoke-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0 0 0 0;
+            gap: 4px;
+        }
+        
+        .spoke:hover {
+            transform: scale(1.12);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.18);
+            z-index: 2;
+        }
+        .hub-center:hover {
+            transform: scale(1.08);
+            box-shadow: 0 12px 32px rgba(102, 126, 234, 0.25);
+            z-index: 3;
+        }
+        .spoke, .hub-center {
+            transition: transform 0.22s cubic-bezier(.4,1.4,.6,1), box-shadow 0.22s cubic-bezier(.4,1.4,.6,1);
+        }
+        
+        .growers-category {
+            background: linear-gradient(145deg, #667eea 0%, #764ba2 100%);
+            border-radius: 12px;
+            padding: 20px;
+            color: white;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+            position: relative;
+            margin-bottom: 30px;
+            min-width: 220px;
+            max-width: 320px;
+        }
+        .growers-category h4 {
+            margin: 0 0 15px 0;
+            font-size: 1.1em;
+            font-weight: 600;
+            text-align: center;
+            border-bottom: 2px solid rgba(255,255,255,0.3);
+            padding-bottom: 10px;
+        }
+        .grower-item {
+            background: rgba(255,255,255,0.15);
+            margin: 6px 0;
+            padding: 6px 10px;
+            border-radius: 5px;
+            font-size: 0.95em;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.18);
+            color: white;
+        }
+        .grower-item:hover {
+            background: rgba(255,255,255,0.25);
+            transform: translateY(-1px);
+        }
+        
+        .retailers-hub {
+            position: relative;
+            width: 175px;
+            height: 175px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .retailer-hub-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 175px;
+            height: 175px;
+            background: linear-gradient(145deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 1.2em;
+            text-align: center;
+            line-height: 1.1;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+            z-index: 10;
+            transform: translate(-50%, -50%);
+        }
+        .retailer-stage-hub {
+            position: relative;
+            width: 350px;
+            height: 350px;
+            min-width: 350px;
+            min-height: 350px;
+            margin: 0 10px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .retailer-spoke {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.85em;
+            color: white;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            overflow: hidden;
+            border: 2px solid #667eea;
+            /* Only rotate the position, not the content */
+            transform: translate(-50%, -50%) rotate(var(--angle)) translate(0, -140px) rotate(calc(-1 * var(--angle)));
+        }
+        .retailer-spoke .spoke-logo {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+            background: white;
+            padding: 0;
+        }
+        .retailer-label {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.75em;
+            font-weight: 600;
+            color: #2c3e50;
+            text-align: center;
+            background: rgba(255,255,255,0.95);
+            padding: 2px 6px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            width: 90px;
+            top: -28px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Agriculture Supply Chain Hub-and-Spoke Ecosystem</h1>
+        
+        <!-- Main Supply Chain with Hub-and-Spoke Design -->
+        <div class="supply-chain">
+            <!-- Input Companies Hub with Actual PNG Logos -->
+            <div class="stage-hub">
+                <!-- 3 spokes above hub -->
+                <div class="spoke-group">
+                    <div class="spoke">
+                        <img src="https://i.imgur.com/D54XvyQ.png" class="spoke-logo" alt="Syngenta Logo">
+                    </div>
+                    <div class="spoke-label">Syngenta</div>
+                </div>
+                <div class="spoke-group">
+                    <div class="spoke">
+                        <img src="https://i.imgur.com/F7I8r0o.png" class="spoke-logo" alt="Bayer Logo">
+                    </div>
+                    <div class="spoke-label">Bayer</div>
+                </div>
+                <div class="spoke-group">
+                    <div class="spoke">
+                        <img src="https://i.imgur.com/DKTRrfV.png" class="spoke-logo" alt="Corteva Logo">
+                    </div>
+                    <div class="spoke-label">Corteva</div>
+                </div>
+                <div class="hub-center">Input Companies</div>
+                <!-- 3 spokes below hub -->
+                <div class="spoke-group">
+                    <div class="spoke">
+                        <img src="https://imgur.com/Ha5hC11.png" class="spoke-logo" alt="Mosaic Logo">
+                    </div>
+                    <div class="spoke-label">Mosaic</div>
+                </div>
+                <div class="spoke-group">
+                    <div class="spoke">
+                        <img src="https://i.imgur.com/D3TMwCT.png" class="spoke-logo" alt="BASF Logo">
+                    </div>
+                    <div class="spoke-label">BASF</div>
+                </div>
+                <div class="spoke-group">
+                    <div class="spoke">
+                        <img src="https://i.imgur.com/a1qp1sT.png" class="spoke-logo" alt="FMC Logo">
+                    </div>
+                    <div class="spoke-label">FMC</div>
+                </div>
+            </div>
+            <div class="arrow-between"></div>
+            <!-- Retailers/Co-ops Hub (radial layout) -->
+            <div class="stage-hub">
+                <div class="retailer-hub-center">Retailers/<br>Co-ops</div>
+                <div class="retailer-spoke logo-growmark" style="--angle: 0deg;">
+                    <img src="https://imgur.com/S0bZUPo.png" class="spoke-logo" alt="Growmark Logo">
+                    <span class="retailer-label">Growmark</span></div>
+                <div class="retailer-spoke logo-chs" style="--angle: 60deg;">
+                    <img src="https://imgur.com/IlTkAjt.png" class="spoke-logo" alt="Nutrien Logo">
+                    <span class="retailer-label">CHS Inc.</span></div>
+                <div class="retailer-spoke logo-helena" style="--angle: 120deg;">
+                    <img src="https://imgur.com/JZSYOBA.png" class="spoke-logo" alt="Helena Logo">
+                    <span class="retailer-label">Helena Agri</span></div>
+                <div class="retailer-spoke logo-wilbur" style="--angle: 180deg;">
+                    <img src="https://imgur.com/ehNaV3x.png" class="spoke-logo" alt="Simplot Logo">
+                    <span class="retailer-label">Wilbur-Ellis</span></div>
+                <div class="retailer-spoke logo-simplot" style="--angle: 240deg;">
+                    <img src="https://imgur.com/UlazosZ.png" class="spoke-logo" alt="CHS Logo">
+                    <span class="retailer-label">Simplot</span></div>
+                <div class="retailer-spoke logo-nutrien-ag" style="--angle: 300deg;">
+                    <img src="https://imgur.com/6oDVe9o.png" class="spoke-logo" alt="Greenpoint Logo">
+                    <span class="retailer-label">Nutrien Ag</span></div>
+            </div>
+            <div class="arrow-between"></div>
+            <!-- Growers/Farmers Column -->
+            <div class="growers-category">
+                <h4>Growers / Farmers</h4>
+                <div class="grower-item">400K+ Farmers</div>
+                <div class="grower-item">Farm Co-ops</div>
+                <div class="grower-item">Corporate Farms</div>
+                <div class="grower-item">Family Operations</div>
+                <div class="grower-item">Regional Growers</div>
+                <div class="grower-item">Specialty Crops</div>
+            </div>
+            <!-- Grain Marketing Hub -->
+            <!--
+            <div class="stage-hub>
+                <COMMENT 3 spokes above hub>
+                <div class="spoke-group">
+                    <div class="spoke logo-cargill"></div>
+                    <div class="spoke-label">Cargill</div>
+                </div>
+                <div class="spoke-group">
+                    <div class="spoke logo-bunge"></div>
+                    <div class="spoke-label">Bunge</div>
+                </div>
+                <div class="spoke-group">
+                    <div class="spoke logo-adm"></div>
+                    <div class="spoke-label">ADM</div>
+                </div>
+                <div class="hub-center">Grain Marketing</div>
+                <COMMENT 3 spokes below hub>
+                <div class="spoke-group">
+                    <div class="spoke logo-dreyfus"></div>
+                    <div class="spoke-label">Louis Dreyfus</div>
+                </div>
+                <div class="spoke-group">
+                    <div class="spoke logo-chs-grain"></div>
+                    <div class="spoke-label">CHS</div>
+                </div>
+                <div class="spoke-group">
+                    <div class="spoke logo-gavilon"></div>
+                    <div class="spoke-label">Gavilon</div>
+                </div>
+            </div>
+            <div class="arrow-between"></div>
+            <COMMENT CPG/Feed/Fuel Hub>
+            <div class="stage-hub">
+                <COMMENT 3 spokes above hub>
+                <div class="spoke-group">
+                    <div class="spoke logo-pepsi"></div>
+                    <div class="spoke-label">PepsiCo</div>
+                </div>
+                <div class="spoke-group">
+                    <div class="spoke logo-mars"></div>
+                    <div class="spoke-label">Mars</div>
+                </div>
+                <div class="spoke-group">
+                    <div class="spoke logo-tyson"></div>
+                    <div class="spoke-label">Tyson Foods</div>
+                </div>
+                <div class="hub-center">CPG / Feed / Fuel</div>
+                <COMMENT 3 spokes below hub>
+                <div class="spoke-group">
+                    <div class="spoke logo-frito"></div>
+                    <div class="spoke-label">Frito-Lay</div>
+                </div>
+                <div class="spoke-group">
+                    <div class="spoke logo-exxon"></div>
+                    <div class="spoke-label">ExxonMobil</div>
+                </div>
+                <div class="spoke-group">
+                    <div class="spoke logo-renewable"></div>
+                    <div class="spoke-label">Renewable Energy</div>
+                </div>
+            </div>  -->
+        </div>
+        
+        <!-- Connection Lines Visualization -->
+        <div class="connection-lines">
+            <!-- OEM connections to Growers -->
+            <div class="connection-line oem-line" style="left: 10%; width: 35%; top: 10px;"></div>
+            <div class="connection-line oem-line" style="left: 10%; width: 55%; top: 20px;"></div>
+            
+            <!-- Finance connections spanning multiple stages -->
+            <div class="connection-line finance-line" style="left: 5%; width: 70%; top: 35px;"></div>
+            
+            <!-- Data services connections -->
+            <div class="connection-line data-line" style="left: 20%; width: 45%; top: 50px;"></div>
+            <div class="connection-line data-line" style="left: 65%; width: 25%; top: 60px;"></div>
+        </div>
+        
+        <!-- Ancillary Services -->
+        <div class="ancillary-services">
+            <h2 class="ancillary-title">Ancillary Services Ecosystem</h2>
+            
+            <div class="services-grid">
+                <div class="service-category">
+                    <div class="connection-indicator">→ Growers</div>
+                    <h4>OEM Equipment</h4>
+                    <div class="service-company">John Deere</div>
+                    <div class="service-company">Caterpillar</div>
+                    <div class="service-company">Case IH</div>
+                    <div class="service-company">CNH Industrial</div>
+                    <div class="service-company">AGCO</div>
+                    <div class="service-company">Kubota</div>
+                </div>
+                
+                <div class="service-category">
+                    <div class="connection-indicator">→ All Stages</div>
+                    <h4>Agricultural Finance</h4>
+                    <div class="service-company">CoBank</div>
+                    <div class="service-company">Farm Credit System</div>
+                    <div class="service-company">Rabobank</div>
+                    <div class="service-company">Wells Fargo Ag</div>
+                    <div class="service-company">AgAmerica</div>
+                    <div class="service-company">Compeer Financial</div>
+                </div>
+                
+                <div class="service-category">
+                    <div class="connection-indicator">→ Growers</div>
+                    <h4>Soil Testing Labs</h4>
+                    <div class="service-company">Waypoint Analytical</div>
+                    <div class="service-company">A&L Great Lakes</div>
+                    <div class="service-company">Spectrum Analytic</div>
+                    <div class="service-company">Ward Laboratories</div>
+                    <div class="service-company">AgSource</div>
+                    <div class="service-company">Servi-Tech</div>
+                </div>
+                
+                <div class="service-category">
+                    <div class="connection-indicator">→ Retailers</div>
+                    <h4>Remote Sensing/Data</h4>
+                    <div class="service-company">Climate FieldView</div>
+                    <div class="service-company">Granular</div>
+                    <div class="service-company">Farmers Edge</div>
+                    <div class="service-company">Taranis</div>
+                    <div class="service-company">Satellite imagery</div>
+                    <div class="service-company">Precision Planting</div>
+                </div>
+                
+                <div class="service-category">
+                    <div class="connection-indicator">→ Multiple</div>
+                    <h4>Data Aggregators</h4>
+                    <div class="service-company">Indigo Agriculture</div>
+                    <div class="service-company">AgriSync</div>
+                    <div class="service-company">Conservis</div>
+                    <div class="service-company">FarmLogs</div>
+                    <div class="service-company">OnFarm</div>
+                    <div class="service-company">Ag Leader</div>
+                </div>
+                
+                <div class="service-category">
+                    <div class="connection-indicator">→ Growers</div>
+                    <h4>Crop Insurance</h4>
+                    <div class="service-company">Crop Risk Services</div>
+                    <div class="service-company">Great American</div>
+                    <div class="service-company">Rural Community</div>
+                    <div class="service-company">ProAg</div>
+                    <div class="service-company">Farmers Mutual Hail</div>
+                    <div class="service-company">Rain & Hail</div>
+                </div>
+                
+                <div class="service-category">
+                    <div class="connection-indicator">→ All Stages</div>
+                    <h4>Transportation & Logistics</h4>
+                    <div class="service-company">UP Railroad</div>
+                    <div class="service-company">BNSF Railway</div>
+                    <div class="service-company">Watco Companies</div>
+                    <div class="service-company">CHS Logistics</div>
+                    <div class="service-company">Gavilon Logistics</div>
+                    <div class="service-company">Savage Companies</div>
+                </div>
+                
+                <div class="service-category">
+                    <div class="connection-indicator">→ Growers</div>
+                    <h4>Custom Application</h4>
+                    <div class="service-company">Helena Custom App</div>
+                    <div class="service-company">Wilbur-Ellis App</div>
+                    <div class="service-company">Regional Cooperatives</div>
+                    <div class="service-company">Independent Applicators</div>
+                    <div class="service-company">Aerial Application</div>
+                    <div class="service-company">Ground Application</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Legend -->
+        <div class="legend">
+            <h4>Service Connection Patterns</h4>
+            <div class="legend-item">
+                <div class="legend-line oem-line"></div>
+                <span>OEM & Equipment services primarily serve Growers with some Retailer integration</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-line finance-line"></div>
+                <span>Financial services span across multiple supply chain stages</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-line data-line"></div>
+                <span>Data & Analytics services connect Retailers to Growers and Grain Marketing</span>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
