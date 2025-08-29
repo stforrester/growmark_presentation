@@ -579,13 +579,15 @@
             /* Only rotate the position, not the content */
             transform: translate(-50%, -50%) rotate(var(--angle)) translate(0, -140px) rotate(calc(-1 * var(--angle)));
         }
-        .retailer-spoke .spoke-logo {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 50%;
-            background: white;
-            padding: 0;
+        .retailer-spoke.logo-growmark {
+            width: 100px;
+            height: 100px;
+            /* Move farther from hub */
+            transform: translate(-50%, -50%) rotate(var(--angle)) translate(0, -170px) rotate(calc(-1 * var(--angle)));
+        }
+        .retailer-spoke.logo-growmark .spoke-logo {
+            width: 100px;
+            height: 100px;
         }
         .retailer-label {
             position: absolute;
@@ -603,6 +605,7 @@
             width: 90px;
             top: -28px;
         }
+        
     </style>
 </head>
 <body>
