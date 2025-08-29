@@ -15,7 +15,8 @@
         
         .container {
             max-width: 1800px;
-            margin: 0 auto;
+            margin-left: auto;
+            margin-right: auto;
             background: white;
             border-radius: 15px;
             padding: 30px;
@@ -32,14 +33,14 @@
         
         .supply-chain {
             display: flex;
-            justify-content: flex-start;
+            justify-content: center;
             align-items: center;
             margin-bottom: 80px;
             position: relative;
             min-height: 500px;
             overflow-x: auto;
             padding: 20px 0;
-            gap: 50px;
+            gap: 120px;
         }
         
         .stage-hub {
@@ -50,7 +51,6 @@
             position: relative;
             width: 180px;
             min-height: 500px;
-            margin: 40px 0px 0 0px; /* Remove left/right margin to bring hubs and arrows closer */
             flex-shrink: 0;
             background: none;
         }
@@ -123,39 +123,6 @@
             display: none;
         }
         
-        .arrow-between {
-            align-self: center;
-            width: 70px;
-            height: 100px;
-            position: relative;
-            display: flex;
-            justify-content: center;
-        }
-        .arrow-between::before {
-            content: '';
-            display: block;
-            position: absolute;
-            left: 0px;
-            top: 65%;
-            transform: translateY(-50%);
-            width: 90px;
-            height: 0;
-            border-top: 3px solid #764ba2;
-            border-radius: 2px;
-        }
-        .arrow-between::after {
-            content: '';
-            position: absolute;
-            left: 85px;
-            top: 65%;
-            transform: translateY(-50%);
-            width: 0;
-            height: 0;
-            border-left: 12px solid #764ba2;
-            border-top: 7px solid transparent;
-            border-bottom: 7px solid transparent;
-        }
-
         /* Spoke positioning - 6 positions around each hub with increased spacing */
         .spoke:nth-child(2) { 
             top: 20px; 
@@ -482,7 +449,6 @@
             box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
             position: relative;
             margin-bottom: -15px;
-            margin-left: 30px;
             min-width: 220px;
             max-width: 320px;
         }
@@ -627,6 +593,18 @@
             font-size: 0.65em;
         }
         
+        .grower-vertical-group {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 28px;
+        }
+        .market-vertical-group {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 28px;
+        }
     </style>
 </head>
 <body>
@@ -677,9 +655,7 @@
                     <div class="spoke-label">FMC</div>
                 </div>
             </div>
-            <div class="arrow-between" style="left: -30px; position: relative;"></div>
-            <!-- Retailers/Co-ops Hub (radial layout) -->
-            <div class="stage-hub">
+            <div class="retailer-stage-hub">
                 <div class="retailer-hub-center">Retailers/<br>Co-ops</div>
                 <div class="retailer-spoke-group growmark" style="--angle: 0deg;">
                     <div class="retailer-spoke growmark">
@@ -718,79 +694,37 @@
                     <span class="retailer-label">Greenpoint</span>
                 </div>
             </div>
-            <div class="arrow-between"></div>
             <!-- Growers/Farmers Column -->
-            <div class="growers-category">
-                <h4>Growers / Farmers</h4>
-                <div class="grower-item">400K+ Farmers</div>
-                <div class="grower-item">Farm Co-ops</div>
-                <div class="grower-item">Corporate Farms</div>
-                <div class="grower-item">Family Operations</div>
-                <div class="grower-item">Regional Growers</div>
-                <div class="grower-item">Specialty Crops</div>
-            </div>
-            <!-- Grain Marketing Hub -->
-            <!--
-            <div class="stage-hub>
-                <COMMENT 3 spokes above hub>
-                <div class="spoke-group">
-                    <div class="spoke logo-cargill"></div>
-                    <div class="spoke-label">Cargill</div>
-                </div>
-                <div class="spoke-group">
-                    <div class="spoke logo-bunge"></div>
-                    <div class="spoke-label">Bunge</div>
-                </div>
-                <div class="spoke-group">
-                    <div class="spoke logo-adm"></div>
-                    <div class="spoke-label">ADM</div>
-                </div>
-                <div class="hub-center">Grain Marketing</div>
-                <COMMENT 3 spokes below hub>
-                <div class="spoke-group">
-                    <div class="spoke logo-dreyfus"></div>
-                    <div class="spoke-label">Louis Dreyfus</div>
-                </div>
-                <div class="spoke-group">
-                    <div class="spoke logo-chs-grain"></div>
-                    <div class="spoke-label">CHS</div>
-                </div>
-                <div class="spoke-group">
-                    <div class="spoke logo-gavilon"></div>
-                    <div class="spoke-label">Gavilon</div>
+            <div class="grower-vertical-group" style="position: relative;">
+                <div class="growers-category" id="growers-box">
+                    <h4>Growers / Farmers</h4>
+                    <div class="grower-item">400K+ Farmers</div>
+                    <div class="grower-item">Farm Co-ops</div>
+                    <div class="grower-item">Corporate Farms</div>
+                    <div class="grower-item">Family Operations</div>
+                    <div class="grower-item">Regional Growers</div>
+                    <div class="grower-item">Specialty Crops</div>
                 </div>
             </div>
-            <div class="arrow-between"></div>
-            <COMMENT CPG/Feed/Fuel Hub>
-            <div class="stage-hub">
-                <COMMENT 3 spokes above hub>
-                <div class="spoke-group">
-                    <div class="spoke logo-pepsi"></div>
-                    <div class="spoke-label">PepsiCo</div>
+            <div class="market-vertical-group">
+                <div class="growers-category">
+                    <h4>CPG / Feed / Fuel</h4>
+                    <div class="grower-item">PepsiCo</div>
+                    <div class="grower-item">Mars</div>
+                    <div class="grower-item">Tyson Foods</div>
+                    <div class="grower-item">Frito-Lay</div>
+                    <div class="grower-item">ExxonMobil</div>
+                    <div class="grower-item">Renewable Energy</div>
                 </div>
-                <div class="spoke-group">
-                    <div class="spoke logo-mars"></div>
-                    <div class="spoke-label">Mars</div>
+                <div class="growers-category">
+                    <h4>Grain Marketing</h4>
+                    <div class="grower-item">Cargill</div>
+                    <div class="grower-item">Bunge</div>
+                    <div class="grower-item">ADM</div>
+                    <div class="grower-item">Louis Dreyfus</div>
+                    <div class="grower-item">Gavilon</div>
                 </div>
-                <div class="spoke-group">
-                    <div class="spoke logo-tyson"></div>
-                    <div class="spoke-label">Tyson Foods</div>
-                </div>
-                <div class="hub-center">CPG / Feed / Fuel</div>
-                <COMMENT 3 spokes below hub>
-                <div class="spoke-group">
-                    <div class="spoke logo-frito"></div>
-                    <div class="spoke-label">Frito-Lay</div>
-                </div>
-                <div class="spoke-group">
-                    <div class="spoke logo-exxon"></div>
-                    <div class="spoke-label">ExxonMobil</div>
-                </div>
-                <div class="spoke-group">
-                    <div class="spoke logo-renewable"></div>
-                    <div class="spoke-label">Renewable Energy</div>
-                </div>
-            </div>  -->
+            </div>
         </div>
         
         <!-- Connection Lines Visualization -->
