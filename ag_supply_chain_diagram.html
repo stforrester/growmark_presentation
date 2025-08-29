@@ -39,7 +39,7 @@
             min-height: 500px;
             overflow-x: auto;
             padding: 20px 0;
-            gap: 40px;
+            gap: 50px;
         }
         
         .stage-hub {
@@ -50,7 +50,7 @@
             position: relative;
             width: 180px;
             min-height: 500px;
-            margin: 0 10px;
+            margin: 40px 0px 0 0px; /* Remove left/right margin to bring hubs and arrows closer */
             flex-shrink: 0;
             background: none;
         }
@@ -125,31 +125,29 @@
         
         .arrow-between {
             align-self: center;
-            width: 60px;
+            width: 70px;
             height: 100px;
             position: relative;
             display: flex;
             justify-content: center;
         }
-        
         .arrow-between::before {
             content: '';
             display: block;
             position: absolute;
-            left: -13px;
-            top: 50%;
+            left: 0px;
+            top: 65%;
             transform: translateY(-50%);
-            width: 50px;
+            width: 90px;
             height: 0;
             border-top: 3px solid #764ba2;
             border-radius: 2px;
         }
-        
         .arrow-between::after {
             content: '';
             position: absolute;
-            left: 32px;
-            top: 50%;
+            left: 85px;
+            top: 65%;
             transform: translateY(-50%);
             width: 0;
             height: 0;
@@ -264,13 +262,6 @@
         }
         
         /* Company-specific styling for other stages */
-        .logo-growmark { background: #1e3a8a; color: white; font-size: 0.6em; }
-        .logo-chs { background: #dc2626; color: white; font-size: 0.6em; }
-        .logo-helena { background: #059669; color: white; font-size: 0.6em; }
-        .logo-wilbur { background: #7c3aed; color: white; font-size: 0.6em; }
-        .logo-simplot { background: #ea580c; color: white; font-size: 0.6em; }
-        .logo-nutrien-ag { background: #005eb8; color: white; font-size: 0.6em; }
-        
         .logo-farmers { background: #22c55e; color: white; font-size: 0.55em; }
         .logo-coop { background: #3b82f6; color: white; font-size: 0.6em; }
         .logo-corporate { background: #8b5cf6; color: white; font-size: 0.55em; }
@@ -490,7 +481,8 @@
             color: white;
             box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
             position: relative;
-            margin-bottom: 30px;
+            margin-bottom: -15px;
+            margin-left: 30px;
             min-width: 220px;
             max-width: 320px;
         }
@@ -543,7 +535,15 @@
             line-height: 1.1;
             box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
             z-index: 10;
+            /* Only translate for centering, do not scale here */
             transform: translate(-50%, -50%);
+            transition: transform 0.22s cubic-bezier(.4,1.4,.6,1), box-shadow 0.22s cubic-bezier(.4,1.4,.6,1);
+        }
+        .retailer-hub-center:hover {
+            /* Only scale, keep centering */
+            transform: translate(-50%, -50%) scale(1.08);
+            box-shadow: 0 12px 32px rgba(102, 126, 234, 0.25);
+            z-index: 3;
         }
         .retailer-stage-hub {
             position: relative;
@@ -557,10 +557,26 @@
             align-items: center;
             justify-content: center;
         }
-        .retailer-spoke {
+        .retailer-spoke-group {
             position: absolute;
             top: 50%;
             left: 50%;
+            width: 90px;
+            height: 100px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            /* Center the group, then apply radial transform */
+            transform: translate(-50%, -50%) rotate(var(--angle)) translate(0, -170px) rotate(calc(-1 * var(--angle)));
+        }
+        .retailer-spoke-group.growmark {
+            width: 120px;
+            height: 130px;
+            transform: translate(-50%, -50%) rotate(var(--angle)) translate(0, -170px) rotate(calc(-1 * var(--angle)));
+        }
+        .retailer-spoke {
+            position: static;
             width: 60px;
             height: 60px;
             border-radius: 50%;
@@ -576,34 +592,39 @@
             cursor: pointer;
             overflow: hidden;
             border: 2px solid #667eea;
-            /* Only rotate the position, not the content */
-            transform: translate(-50%, -50%) rotate(var(--angle)) translate(0, -140px) rotate(calc(-1 * var(--angle)));
         }
-        .retailer-spoke.logo-growmark {
+        .retailer-spoke.growmark {
             width: 100px;
             height: 100px;
-            /* Move farther from hub */
-            transform: translate(-50%, -50%) rotate(var(--angle)) translate(0, -170px) rotate(calc(-1 * var(--angle)));
         }
-        .retailer-spoke.logo-growmark .spoke-logo {
-            width: 100px;
-            height: 100px;
+        .retailer-spoke {
+            transition: transform 0.22s cubic-bezier(.4,1.4,.6,1), box-shadow 0.22s cubic-bezier(.4,1.4,.6,1);
+        }
+        .retailer-spoke:hover {
+            transform: scale(1.12);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.18);
+            z-index: 2;
         }
         .retailer-label {
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 0.75em;
+            position: static;
+            margin-top: 5px;
+            font-size: 0.65em;
             font-weight: 600;
             color: #2c3e50;
             text-align: center;
             background: rgba(255,255,255,0.95);
-            padding: 2px 6px;
+            padding: 2px 8px;
             border-radius: 8px;
             border: 1px solid #ddd;
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            width: 90px;
-            top: -28px;
+            width: auto;
+            pointer-events: none;
+            white-space: nowrap;
+        }
+        .retailer-label.growmark {
+            margin-top: 8px;
+            width: auto;
+            font-size: 0.65em;
         }
         
     </style>
@@ -656,28 +677,46 @@
                     <div class="spoke-label">FMC</div>
                 </div>
             </div>
-            <div class="arrow-between"></div>
+            <div class="arrow-between" style="left: -30px; position: relative;"></div>
             <!-- Retailers/Co-ops Hub (radial layout) -->
             <div class="stage-hub">
                 <div class="retailer-hub-center">Retailers/<br>Co-ops</div>
-                <div class="retailer-spoke logo-growmark" style="--angle: 0deg;">
-                    <img src="https://raw.githubusercontent.com/stforrester/growmark_presentation/main/assets/growmark.png" class="spoke-logo" alt="Growmark Logo">
-                    <span class="retailer-label">Growmark</span></div>
-                <div class="retailer-spoke logo-nutrien-ag" style="--angle: 60deg;">
-                    <img src="https://raw.githubusercontent.com/stforrester/growmark_presentation/main/assets/nutrien_1.png" class="spoke-logo" alt="Nutrien Logo">
-                    <span class="retailer-label">Nutrien</span></div>
-                <div class="retailer-spoke logo-helena" style="--angle: 120deg;">
-                    <img src="https://raw.githubusercontent.com/stforrester/growmark_presentation/main/assets/Helena.png" class="spoke-logo" alt="Helena Logo">
-                    <span class="retailer-label">Helena Agri</span></div>
-                <div class="retailer-spoke logo-simplot" style="--angle: 180deg;">
-                    <img src="https://raw.githubusercontent.com/stforrester/growmark_presentation/main/assets/Simplot.png" class="spoke-logo" alt="Simplot Logo">
-                    <span class="retailer-label">Simplot</span></div>
-                <div class="retailer-spoke logo-chs" style="--angle: 240deg;">
-                    <img src="https://imgur.com/UlazosZ.png" class="spoke-logo" alt="CHS Logo">
-                    <span class="retailer-label">CHS</span></div>
-                <div class="retailer-spoke logo-greenpoint" style="--angle: 300deg;">
-                    <img src="https://raw.githubusercontent.com/stforrester/growmark_presentation/main/assets/greenpoint.png" class="spoke-logo" alt="Greenpoint Logo">
-                    <span class="retailer-label">Greenpoint</span></div>
+                <div class="retailer-spoke-group growmark" style="--angle: 0deg;">
+                    <div class="retailer-spoke growmark">
+                        <img src="https://raw.githubusercontent.com/stforrester/growmark_presentation/main/assets/growmark.png" class="spoke-logo" alt="Growmark Logo">
+                    </div>
+                    <span class="retailer-label growmark">Growmark</span>
+                </div>
+                <div class="retailer-spoke-group" style="--angle: 60deg;">
+                    <div class="retailer-spoke">
+                        <img src="https://raw.githubusercontent.com/stforrester/growmark_presentation/main/assets/nutrien_1.png" class="spoke-logo" alt="Nutrien Logo">
+                    </div>
+                    <span class="retailer-label">Nutrien</span>
+                </div>
+                <div class="retailer-spoke-group" style="--angle: 120deg;">
+                    <div class="retailer-spoke">
+                        <img src="https://raw.githubusercontent.com/stforrester/growmark_presentation/main/assets/Helena.png" class="spoke-logo" alt="Helena Logo">
+                    </div>
+                    <span class="retailer-label">Helena Agri</span>
+                </div>
+                <div class="retailer-spoke-group" style="--angle: 180deg;">
+                    <div class="retailer-spoke">
+                        <img src="https://raw.githubusercontent.com/stforrester/growmark_presentation/main/assets/Simplot.png" class="spoke-logo" alt="Simplot Logo">
+                    </div>
+                    <span class="retailer-label">Simplot</span>
+                </div>
+                <div class="retailer-spoke-group" style="--angle: 240deg;">
+                    <div class="retailer-spoke">
+                        <img src="https://raw.githubusercontent.com/stforrester/growmark_presentation/main/assets/CHS.png" class="spoke-logo" alt="CHS Logo">
+                    </div>
+                    <span class="retailer-label">CHS</span>
+                </div>
+                <div class="retailer-spoke-group" style="--angle: 300deg;">
+                    <div class="retailer-spoke">
+                        <img src="https://raw.githubusercontent.com/stforrester/growmark_presentation/main/assets/greenpoint.png" class="spoke-logo" alt="Greenpoint Logo">
+                    </div>
+                    <span class="retailer-label">Greenpoint</span>
+                </div>
             </div>
             <div class="arrow-between"></div>
             <!-- Growers/Farmers Column -->
