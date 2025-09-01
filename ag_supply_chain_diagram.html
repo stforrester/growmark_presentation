@@ -40,7 +40,6 @@
             min-height: 500px;
             overflow-x: auto;
             padding: 20px 0;
-            gap: 120px;
         }
         
         .stage-hub {
@@ -655,6 +654,12 @@
                     <div class="spoke-label">FMC</div>
                 </div>
             </div>
+            <div class="arrow-horizontal" style="width: 120px; height: 40px; display: flex; align-items: center; justify-content: center;">
+                <div style="width: 76px; height: 3px; background: #764ba2; border-radius: 2px;"></div>
+                <svg width="12" height="12" viewBox="0 0 12 12" style="margin-left:-2px;">
+                    <polygon points="0,0 12,6 0,12" fill="#764ba2" />
+                </svg>
+            </div>
             <div class="retailer-stage-hub">
                 <div class="retailer-hub-center">Retailers/<br>Co-ops</div>
                 <div class="retailer-spoke-group growmark" style="--angle: 0deg;">
@@ -694,6 +699,12 @@
                     <span class="retailer-label">Greenpoint</span>
                 </div>
             </div>
+            <div class="arrow-horizontal" style="width: 120px; height: 40px; display: flex; align-items: center; justify-content: center;">
+                <div style="width: 76px; height: 3px; background: #764ba2; border-radius: 2px;"></div>
+                <svg width="12" height="12" viewBox="0 0 12 12" style="margin-left:-2px;">
+                    <polygon points="0,0 12,6 0,12" fill="#764ba2" />
+                </svg>
+            </div>
             <!-- Growers/Farmers Column -->
             <div class="grower-vertical-group" style="position: relative;">
                 <div class="growers-category" id="growers-box">
@@ -705,6 +716,18 @@
                     <div class="grower-item">Regional Growers</div>
                     <div class="grower-item">Specialty Crops</div>
                 </div>
+            </div>
+            <div class="arrow-diagonal" style="width: 120px; height: 160px; display: flex; align-items: flex-end; justify-content: center;">
+                <svg width="80" height="160">
+                    <!-- Upward diagonal line -->
+                    <line x1="0" y1="80" x2="75" y2="5" stroke="#764ba2" stroke-width="3" />
+                    <!-- Arrowhead for upward line, tip at (75,5), base points perpendicular to line -->
+                    <polygon points="79,1 73,16 65,8" fill="#764ba2" />
+                    <!-- Downward diagonal line -->
+                    <line x1="0" y1="80" x2="75" y2="155" stroke="#764ba2" stroke-width="3" />
+                    <!-- Arrowhead for downward line, tip at (75,155), base points perpendicular to line -->
+                    <polygon points="79,159 73,144 65,152" fill="#764ba2" />
+                </svg>
             </div>
             <div class="market-vertical-group">
                 <div class="growers-category">
