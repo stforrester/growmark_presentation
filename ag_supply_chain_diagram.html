@@ -263,12 +263,19 @@
         
         .services-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(4, 1fr);
+            grid-auto-flow: row;
             gap: 20px;
             margin-bottom: 30px;
+            width: fit-content;
+            margin-left: auto;
+            margin-right: auto;
         }
         
         .service-category {
+            width: 260px;
+            max-width: 260px;
+            min-width: 260px;
             background: linear-gradient(145deg, #ff9a56 0%, #ffad56 100%);
             border-radius: 12px;
             padding: 20px;
@@ -328,6 +335,9 @@
             border-radius: 10px;
             margin-top: 30px;
             border-left: 5px solid #3498db;
+            width: fit-content;
+            margin-left: auto;
+            margin-right: auto;
         }
         
         .legend h4 {
@@ -394,7 +404,8 @@
                 display: none;
             }
             .services-grid {
-                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                grid-template-columns: repeat(2, 1fr);
+                width: 500px;
             }
         }
         
@@ -415,6 +426,7 @@
             }
             .services-grid {
                 grid-template-columns: 1fr;
+                width: 100%;
             }
         }
         
@@ -608,7 +620,7 @@
 </head>
 <body>
     <div class="container">
-        <h1>Agriculture Supply Chain Hub-and-Spoke Ecosystem</h1>
+        <h1>Agriculture Supply Chain Ecosystem</h1>
         
         <!-- Main Supply Chain with Hub-and-Spoke Design -->
         <div class="supply-chain">
@@ -750,56 +762,40 @@
             </div>
         </div>
         
-        <!-- Connection Lines Visualization -->
-        <div class="connection-lines">
-            <!-- OEM connections to Growers -->
-            <div class="connection-line oem-line" style="left: 10%; width: 35%; top: 10px;"></div>
-            <div class="connection-line oem-line" style="left: 10%; width: 55%; top: 20px;"></div>
-            
-            <!-- Finance connections spanning multiple stages -->
-            <div class="connection-line finance-line" style="left: 5%; width: 70%; top: 35px;"></div>
-            
-            <!-- Data services connections -->
-            <div class="connection-line data-line" style="left: 20%; width: 45%; top: 50px;"></div>
-            <div class="connection-line data-line" style="left: 65%; width: 25%; top: 60px;"></div>
-        </div>
-        
         <!-- Ancillary Services -->
         <div class="ancillary-services">
-            <h2 class="ancillary-title">Ancillary Services Ecosystem</h2>
+            <h2 class="ancillary-title">Ancillary Services</h2>
             
             <div class="services-grid">
                 <div class="service-category">
                     <div class="connection-indicator">→ Growers</div>
                     <h4>OEM Equipment</h4>
                     <div class="service-company">John Deere</div>
-                    <div class="service-company">Caterpillar</div>
-                    <div class="service-company">Case IH</div>
                     <div class="service-company">CNH Industrial</div>
-                    <div class="service-company">AGCO</div>
+                    <div class="service-company">AGCO Corporation</div>
                     <div class="service-company">Kubota</div>
+                    <div class="service-company">CLAAS</div>
                 </div>
                 
                 <div class="service-category">
                     <div class="connection-indicator">→ All Stages</div>
                     <h4>Agricultural Finance</h4>
                     <div class="service-company">CoBank</div>
-                    <div class="service-company">Farm Credit System</div>
                     <div class="service-company">Rabobank</div>
-                    <div class="service-company">Wells Fargo Ag</div>
-                    <div class="service-company">AgAmerica</div>
+                    <div class="service-company">AgFirst FCB</div>
                     <div class="service-company">Compeer Financial</div>
+                    <div class="service-company">Agricultural Credit Corporation</div>
+
                 </div>
                 
                 <div class="service-category">
                     <div class="connection-indicator">→ Growers</div>
                     <h4>Soil Testing Labs</h4>
-                    <div class="service-company">Waypoint Analytical</div>
-                    <div class="service-company">A&L Great Lakes</div>
-                    <div class="service-company">Spectrum Analytic</div>
-                    <div class="service-company">Ward Laboratories</div>
                     <div class="service-company">AgSource</div>
-                    <div class="service-company">Servi-Tech</div>
+                    <div class="service-company">A&L Great Lakes</div>
+                    <div class="service-company">Midwest Labs</div>
+                    <div class="service-company">Ward Labs</div>
+                    <div class="service-company">Brookside</div>
                 </div>
                 
                 <div class="service-category">
@@ -809,7 +805,6 @@
                     <div class="service-company">Granular</div>
                     <div class="service-company">Farmers Edge</div>
                     <div class="service-company">Taranis</div>
-                    <div class="service-company">Satellite imagery</div>
                     <div class="service-company">Precision Planting</div>
                 </div>
                 
@@ -821,16 +816,14 @@
                     <div class="service-company">Conservis</div>
                     <div class="service-company">FarmLogs</div>
                     <div class="service-company">OnFarm</div>
-                    <div class="service-company">Ag Leader</div>
                 </div>
                 
                 <div class="service-category">
                     <div class="connection-indicator">→ Growers</div>
                     <h4>Crop Insurance</h4>
-                    <div class="service-company">Crop Risk Services</div>
+                    <div class="service-company">Chubb Agri</div>
                     <div class="service-company">Great American</div>
-                    <div class="service-company">Rural Community</div>
-                    <div class="service-company">ProAg</div>
+                    <div class="service-company">QBE</div>
                     <div class="service-company">Farmers Mutual Hail</div>
                     <div class="service-company">Rain & Hail</div>
                 </div>
@@ -838,23 +831,21 @@
                 <div class="service-category">
                     <div class="connection-indicator">→ All Stages</div>
                     <h4>Transportation & Logistics</h4>
-                    <div class="service-company">UP Railroad</div>
+                    <div class="service-company">CPKC</div>
                     <div class="service-company">BNSF Railway</div>
-                    <div class="service-company">Watco Companies</div>
-                    <div class="service-company">CHS Logistics</div>
-                    <div class="service-company">Gavilon Logistics</div>
-                    <div class="service-company">Savage Companies</div>
+                    <div class="service-company">JB Hunt</div>
+                    <div class="service-company">CH Robinson</div>
+                    <div class="service-company">Lineage Logistics</div>
                 </div>
                 
                 <div class="service-category">
                     <div class="connection-indicator">→ Growers</div>
                     <h4>Custom Application</h4>
-                    <div class="service-company">Helena Custom App</div>
+                    <div class="service-company">Agtegra Application</div>
                     <div class="service-company">Wilbur-Ellis App</div>
-                    <div class="service-company">Regional Cooperatives</div>
-                    <div class="service-company">Independent Applicators</div>
-                    <div class="service-company">Aerial Application</div>
-                    <div class="service-company">Ground Application</div>
+                    <div class="service-company">Keystone</div>
+                    <div class="service-company">MFA</div>
+                    <div class="service-company">NEW Coop</div>
                 </div>
             </div>
         </div>
